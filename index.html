@@ -201,7 +201,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;python&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[&quot;shell&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -212,9 +212,6 @@
       <img src="images/logo.png" class="logo" alt="Logo" />
         <div class="lang-selector">
               <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
-              <a href="#" data-language-name="javascript">javascript</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -225,269 +222,223 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
-            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
-          </li>
-          <li>
-            <a href="#kittens" class="toc-h1 toc-link" data-title="Kittens">Kittens</a>
+            <a href="#public-http-api-methods" class="toc-h1 toc-link" data-title="Public HTTP API Methods">Public HTTP API Methods</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-kittens" class="toc-h2 toc-link" data-title="Get All Kittens">Get All Kittens</a>
+                    <a href="#returnticker" class="toc-h2 toc-link" data-title="returnTicker">returnTicker</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-kitten" class="toc-h2 toc-link" data-title="Get a Specific Kitten">Get a Specific Kitten</a>
+                    <a href="#return24volume" class="toc-h2 toc-link" data-title="return24Volume">return24Volume</a>
                   </li>
                   <li>
-                    <a href="#delete-a-specific-kitten" class="toc-h2 toc-link" data-title="Delete a Specific Kitten">Delete a Specific Kitten</a>
+                    <a href="#returnorderbook" class="toc-h2 toc-link" data-title="returnOrderBook">returnOrderBook</a>
                   </li>
               </ul>
           </li>
-          <li>
-            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
-          </li>
       </ul>
-        <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
-            <li><a href='https://github.com/lord/slate'>Documentation Powered by Slate</a></li>
-        </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Tyche Exchange provides both HTTP and websocket APIs for interacting with the exchange. Both allow read access to public market data and private read access to your account. Private write access to your account is available via the private HTTP API.</p>
 
-<p>We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>The public HTTP endpoint is accessed via GET requests while the private endpoint is accessed via HMAC-SHA512 signed POST requests using <a href="https://github.com/lord/slate">API keys</a>. Both types of HTTP endpoints return results in JSON format.</p>
 
-<p>This example API documentation page was created with <a href="https://github.com/lord/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&#39;s documentation.</p>
-<h1 id='authentication'>Authentication</h1>
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-</code></pre>
-<blockquote>
-<p>Make sure to replace <code>meowmeowmeow</code> with your API key.</p>
-</blockquote>
-
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code>Authorization: meowmeowmeow</code></p>
+<p>The websocket API allows push notifications about the public order books, lend books and your private account. Similarly to the HTTP API, it requires HMAC-SHA512 signed requests using <a href="https://github.com/lord/slate">API keys</a> for requests related to your private account.</p>
+<h1 id='public-http-api-methods'>Public HTTP API Methods</h1>
+<p>The public HTTP API allows read access to public market data.</p>
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+Public HTTP URL: `https://trade.tyche.exchange/public`
 </aside>
-<h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">kittens</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+<p>There are seven public methods, all of which take HTTP GET requests and return output in JSON format. No authentication is necessary but you must not excessively use any API endpoint.</p>
+<h2 id='returnticker'>returnTicker</h2>
+<p>Retrieves summary information for each currency pair listed on the exchange. Fields include:</p>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/returnTicker"</span>
 </code></pre>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Example output:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="err">...</span><span class="w">
+</span><span class="p">{</span><span class="w"> </span><span class="err">BTC_BCN</span><span class="p">:</span><span class="w">
+   </span><span class="p">{</span><span class="w"> </span><span class="err">id</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+     </span><span class="err">last</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00000024</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">lowestAsk</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00000025</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">highestBid</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00000024</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">percentChange</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.04347826</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">baseVolume</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">58.19056621</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">quoteVolume</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">245399098.35236773</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">isFrozen</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">0</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">high</span><span class="mi">24</span><span class="err">hr</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00000025</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">low</span><span class="mi">24</span><span class="err">hr</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00000022</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="err">USDC_BTC</span><span class="p">:</span><span class="w">
+   </span><span class="p">{</span><span class="w"> </span><span class="err">id</span><span class="p">:</span><span class="w"> </span><span class="mi">224</span><span class="p">,</span><span class="w">
+     </span><span class="err">last</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">6437.65329245</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">lowestAsk</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">6436.73575054</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">highestBid</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">6425.68259132</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">percentChange</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00744080</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">baseVolume</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">1193053.18913982</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">quoteVolume</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">185.43611063</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">isFrozen</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">0</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">high</span><span class="mi">24</span><span class="err">hr</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">6499.09114231</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">low</span><span class="mi">24</span><span class="err">hr</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">6370.00000000</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+</span><span class="err">...</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves all kittens.</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET http://example.com/api/kittens</code></p>
-<h3 id='query-parameters'>Query Parameters</h3>
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
+<th>Field</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td>id</td>
+<td>Id of the currency pair.</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td>last</td>
+<td>Execution price for the most recent trade for this pair.</td>
+</tr>
+<tr>
+<td>lowestAsk</td>
+<td>Lowest current purchase price for this asset.</td>
+</tr>
+<tr>
+<td>highestBid</td>
+<td>Highest current sale price for this asset.</td>
+</tr>
+<tr>
+<td>percentChange</td>
+<td>Price change percentage.</td>
+</tr>
+<tr>
+<td>baseVolume</td>
+<td>Base units traded in the last 24 hours.</td>
+</tr>
+<tr>
+<td>quoteVolume</td>
+<td>Quoted units traded in the last 24 hours.</td>
+</tr>
+<tr>
+<td>isFrozen</td>
+<td>Indicates if this market is currently trading or not.</td>
+</tr>
+<tr>
+<td>high24hr</td>
+<td>The highest execution price for this pair within the last 24 hours.</td>
+</tr>
+<tr>
+<td>low24hr</td>
+<td>The lowest execution price for this pair within the last 24 hours.</td>
 </tr>
 </tbody></table>
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<h2 id='return24volume'>return24Volume</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/return24Volume"</span>
 </code></pre>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Example output:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="err">BTC_LTC</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">BTC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">38.13504038</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="err">LTC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">4662.34229096</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="err">BTC_MAID</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">BTC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">10.38010322</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="err">MAID</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">359919.71515255</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+</span><span class="err">...</span><span class="w">
+  </span><span class="err">USDC_BTC</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">USDC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">481389.13175764</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="err">BTC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">74.73988488</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="err">USDC_ETH</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">USDC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">72302.27016210</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="err">ETH</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">357.72884034</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="err">totalBTC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">2340.96441558</span><span class="err">'</span><span class="p">,</span><span class="w">
+  </span><span class="err">totalETH</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">2771.63218462</span><span class="err">'</span><span class="p">,</span><span class="w">
+  </span><span class="err">totalUSDC</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">681255.56961992</span><span class="err">'</span><span class="p">,</span><span class="w">
+  </span><span class="err">totalXMR</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">267.83601213</span><span class="err">'</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
+<p>Returns the 24-hour volume for all markets as well as totals for primary currencies.</p>
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
-</tr>
-</tbody></table>
-<h2 id='delete-a-specific-kitten'>Delete a Specific Kitten</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -X DELETE
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<p>Primary currencies include BTC, ETH, USDT, USDC and XMR and show the total amount of those tokens that have traded within the last 24 hours.</p>
+<h2 id='returnorderbook'>returnOrderBook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/returnOrderBook&amp;currencyPair=BTC_ETH&amp;depth=10"</span>
 </code></pre>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Example output for a selected market:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"deleted"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">":("</span><span class="w">
-</span><span class="p">}</span><span class="w">
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="err">asks</span><span class="p">:</span><span class="w"> 
+   </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03142500</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">16.5322</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03143140</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.14561998</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03144000</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">149.2466</span><span class="w"> </span><span class="p">],</span><span class="w">
+</span><span class="err">...</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03175915</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">3.95025486</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03176634</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01579061</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="err">bids</span><span class="p">:</span><span class="w"> 
+   </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03141658</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">4.75222193</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03141644</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.05252027</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03141608</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.20943191</span><span class="w"> </span><span class="p">],</span><span class="w">
+</span><span class="err">...</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03129457</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01861854</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03128648</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.47593681</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+  </span><span class="err">isFrozen</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">0</span><span class="err">'</span><span class="p">,</span><span class="w">
+  </span><span class="err">seq</span><span class="p">:</span><span class="w"> </span><span class="mi">595100792</span><span class="w"> </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>This endpoint deletes a specific kitten.</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>DELETE http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters-2'>URL Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to delete</td>
-</tr>
-</tbody></table>
-<h1 id='errors'>Errors</h1>
+<blockquote>
+<p>Example output for all markets:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w"> </span><span class="err">BTC_ETH</span><span class="p">:</span><span class="w"> 
+   </span><span class="p">{</span><span class="w"> </span><span class="err">asks</span><span class="p">:</span><span class="w"> 
+      </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03143500</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">46.84591041</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03144000</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">100.086388</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03144865</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">6.01683252</span><span class="w"> </span><span class="p">],</span><span class="w">
+</span><span class="err">...</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03132669</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.01619218</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="err">isFrozen</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">0</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">seq</span><span class="p">:</span><span class="w"> </span><span class="mi">130962406</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="err">BTC_LTC</span><span class="p">:</span><span class="w"> 
+   </span><span class="p">{</span><span class="w"> </span><span class="err">asks</span><span class="p">:</span><span class="w"> 
+      </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00812000</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">6.82726987</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00812253</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">6.6911383</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00812500</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">84.1323</span><span class="w"> </span><span class="p">],</span><span class="w">
+</span><span class="err">...</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">1.06900000</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0162</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">1.06800000</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0162</span><span class="w"> </span><span class="p">],</span><span class="w">
+        </span><span class="p">[</span><span class="w"> </span><span class="err">'</span><span class="mf">1.06700000</span><span class="err">'</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0162</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">],</span><span class="w">
+     </span><span class="err">isFrozen</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">0</span><span class="err">'</span><span class="p">,</span><span class="w">
+     </span><span class="err">seq</span><span class="p">:</span><span class="w"> </span><span class="mi">51055117</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>Returns the order book for a given market, as well as a sequence number used by websockets for synchronization of book updates and an indicator specifying whether the market is frozen. You may set currencyPair to &quot;all&quot; to get the order books of all markets.
 <aside class="notice">
-This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
-</aside>
-
-<p>The Kittn API uses the following error codes:</p>
+Consider using the Websocket API over HTTP if you are looking for fresh and full order book depth.
+</aside></p>
 
 <table><thead>
 <tr>
-<th>Error Code</th>
-<th>Meaning</th>
+<th>Request Parameter</th>
+<th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>400</td>
-<td>Bad Request -- Your request is invalid.</td>
+<td>currencyPair</td>
+<td>A pair like BTC_ETH or all</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized -- Your API key is wrong.</td>
+<td>depth (optional)</td>
+<td>Default depth is 50. Max depth is 100.</td>
+</tr>
+</tbody></table>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>asks</td>
+<td>An array of price aggregated offers in the book ordered from low to high price.</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
+<td>bids</td>
+<td>An array of price aggregated bids in the book ordered from high to low price.</td>
 </tr>
 <tr>
-<td>404</td>
-<td>Not Found -- The specified kitten could not be found.</td>
+<td>isFrozen</td>
+<td>Indicates if trading the market is currently disabled or not.</td>
 </tr>
 <tr>
-<td>405</td>
-<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone -- The kitten requested has been removed from our servers.</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&#39;m a teapot.</td>
-</tr>
-<tr>
-<td>429</td>
-<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
-</tr>
-<tr>
-<td>500</td>
-<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
+<td>seq</td>
+<td>An always-incrementing sequence number for this market.</td>
 </tr>
 </tbody></table>
 
@@ -495,9 +446,6 @@ This error section is stored in a separate file in <code>includes/_errors.md</co
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
-                <a href="#" data-language-name="javascript">javascript</a>
           </div>
       </div>
     </div>
