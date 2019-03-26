@@ -233,9 +233,37 @@
                   <li>
                     <a href="#returnorderbook" class="toc-h2 toc-link" data-title="returnOrderBook">returnOrderBook</a>
                   </li>
+                  <li>
+                    <a href="#returntradehistory-public" class="toc-h2 toc-link" data-title="returnTradeHistory (public)">returnTradeHistory (public)</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#trading" class="toc-h1 toc-link" data-title="Trading">Trading</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#order-placement" class="toc-h2 toc-link" data-title="Order Placement">Order Placement</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#authentication-keys-and-access-rights" class="toc-h2 toc-link" data-title="Authentication Keys and Access Rights">Authentication Keys and Access Rights</a>
+                  </li>
+                  <li>
+                    <a href="#authentication-process" class="toc-h2 toc-link" data-title="Authentication Process">Authentication Process</a>
+                  </li>
+                  <li>
+                    <a href="#examples" class="toc-h2 toc-link" data-title="Examples">Examples</a>
+                  </li>
               </ul>
           </li>
       </ul>
+        <ul class="toc-footer">
+            <li><a href='https://github.com/lord/slate'>Documentation Powered by Slate</a></li>
+        </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
@@ -250,7 +278,7 @@
 <p>The public HTTP API allows read access to public market data.</p>
 
 <aside class="notice">
-Public HTTP URL: `https://trade.tyche.exchange/public`
+Public HTTP URL: `https://trade.tyche.exchange/api/v1/public`
 </aside>
 
 <p>There are seven public methods, all of which take HTTP GET requests and return output in JSON format. No authentication is necessary but you must not excessively use any API endpoint.</p>
@@ -333,7 +361,7 @@ Public HTTP URL: `https://trade.tyche.exchange/public`
 <td>The lowest execution price for this pair within the last 24 hours.</td>
 </tr>
 </tbody></table>
-<h2 id='return24volume'>return24Volume</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/return24Volume"</span>
+<h2 id='return24volume'>return24Volume</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/return24hVolume"</span>
 </code></pre>
 <blockquote>
 <p>Example output:</p>
@@ -351,7 +379,7 @@ Public HTTP URL: `https://trade.tyche.exchange/public`
 <p>Returns the 24-hour volume for all markets as well as totals for primary currencies.</p>
 
 <p>Primary currencies include BTC, ETH, USDT, USDC and XMR and show the total amount of those tokens that have traded within the last 24 hours.</p>
-<h2 id='returnorderbook'>returnOrderBook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/returnOrderBook&amp;currencyPair=BTC_ETH&amp;depth=10"</span>
+<h2 id='returnorderbook'>returnOrderBook</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/returnOrderBook?currencyPair=ETH_BTC&amp;depth=10"</span>
 </code></pre>
 <blockquote>
 <p>Example output for a selected market:</p>
@@ -410,7 +438,7 @@ Consider using the Websocket API over HTTP if you are looking for fresh and full
 </thead><tbody>
 <tr>
 <td>currencyPair</td>
-<td>A pair like BTC_ETH or all</td>
+<td>A pair like ETH_BTC or all</td>
 </tr>
 <tr>
 <td>depth (optional)</td>
@@ -441,7 +469,457 @@ Consider using the Websocket API over HTTP if you are looking for fresh and full
 <td>An always-incrementing sequence number for this market.</td>
 </tr>
 </tbody></table>
+<h2 id='returntradehistory-public'>returnTradeHistory (public)</h2><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/returnTradeHistory?currencyPair=ETH_BTC"</span>
+curl <span class="s2">"https://trade.tyche.exchange/api/v1/public/returnTradeHistory?currencyPair=ETH_BTC&amp;start=1548480203&amp;end=1553577808"</span>
 
+</code></pre>
+<blockquote>
+<p>Example output:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">globalTradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">394604821</span><span class="p">,</span><span class="w">
+    </span><span class="err">tradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">45205037</span><span class="p">,</span><span class="w">
+    </span><span class="err">date</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">2018-10-22</span><span class="w"> </span><span class="mi">15</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">57</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">type</span><span class="p">:</span><span class="w"> </span><span class="err">'sell'</span><span class="p">,</span><span class="w">
+    </span><span class="err">rate</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03143485</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">amount</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00009034</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">total</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00000283</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w"> </span><span class="err">globalTradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">394604809</span><span class="p">,</span><span class="w">
+    </span><span class="err">tradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">45205036</span><span class="p">,</span><span class="w">
+    </span><span class="err">date</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">2018-10-22</span><span class="w"> </span><span class="mi">15</span><span class="p">:</span><span class="mi">03</span><span class="p">:</span><span class="mi">47</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">type</span><span class="p">:</span><span class="w"> </span><span class="err">'buy'</span><span class="p">,</span><span class="w">
+    </span><span class="err">rate</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03143485</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">amount</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00770177</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">total</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00024210</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+</span><span class="err">...</span><span class="w">
+  </span><span class="p">{</span><span class="w"> </span><span class="err">globalTradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">394603147</span><span class="p">,</span><span class="w">
+    </span><span class="err">tradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">45204939</span><span class="p">,</span><span class="w">
+    </span><span class="err">date</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">2018-10-22</span><span class="w"> </span><span class="mi">14</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">59</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">type</span><span class="p">:</span><span class="w"> </span><span class="err">'sell'</span><span class="p">,</span><span class="w">
+    </span><span class="err">rate</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03139500</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">amount</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00041216</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">total</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.00001293</span><span class="err">'</span><span class="w"> </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w"> </span><span class="err">globalTradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">394603133</span><span class="p">,</span><span class="w">
+    </span><span class="err">tradeID</span><span class="p">:</span><span class="w"> </span><span class="mi">45204938</span><span class="p">,</span><span class="w">
+    </span><span class="err">date</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mi">2018-10-22</span><span class="w"> </span><span class="mi">14</span><span class="p">:</span><span class="mi">31</span><span class="p">:</span><span class="mi">41</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">type</span><span class="p">:</span><span class="w"> </span><span class="err">'sell'</span><span class="p">,</span><span class="w">
+    </span><span class="err">rate</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.03140030</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">amount</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">2.42099000</span><span class="err">'</span><span class="p">,</span><span class="w">
+    </span><span class="err">total</span><span class="p">:</span><span class="w"> </span><span class="err">'</span><span class="mf">0.07601981</span><span class="err">'</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></code></pre>
+<p>Returns the past 200 trades for a given market, or up to 5000 trades between a range specified in UNIX timestamps by the &quot;start&quot; and &quot;end&quot; GET parameters. Fields include:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>globalTradeID</td>
+<td>The globally unique ID associated with this trade.</td>
+</tr>
+<tr>
+<td>tradeID</td>
+<td>The ID unique only to this currency pair associated with this trade.</td>
+</tr>
+<tr>
+<td>date</td>
+<td>The UTC date and time of the trade execution.</td>
+</tr>
+<tr>
+<td>type</td>
+<td>Designates this trade as a buy or a sell from the side of the taker.</td>
+</tr>
+<tr>
+<td>rate</td>
+<td>The price in base currency for this asset.</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>The number of units transacted in this trade.</td>
+</tr>
+<tr>
+<td>total</td>
+<td>The total price in base units for this trade.</td>
+</tr>
+</tbody></table>
+<h1 id='trading'>Trading</h1>
+<aside class="notice">
+These methods require authentication
+</aside>
+
+<p>Base URL: <code>https://trade.tyche.exchange/api/v1/trading</code></p>
+<h2 id='order-placement'>Order Placement</h2>
+<p><code>POST https://trade.tyche.exchange/api/v1/trading/placeOrder</code></p>
+
+<aside class="notice">
+In order to invoke this method, authentication key must have R2 access permission
+</aside>
+
+<p>Places a new order.</p>
+<pre class="highlight plaintext"><code>POST https://trade.tyche.exchange/api/v1/trading/placeOrder
+{
+  "instrument": "ETH-BTC",
+  "side": "buy",
+  "volume": 0.0001,
+  "price": 0.02
+}
+</code></pre>
+<blockquote>
+<p>The above request returns JSON structured like this:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>{
+   "status":true,
+   "result":{
+      "id":46,
+      "side":"buy",
+      "type":"limit",
+      "status":"submitting",
+      "timestamp":"2019-03-26 06:43:31",
+      "lastUpdate":"2019-03-26 06:43:31",
+      "volume":"0.0001",
+      "price":"0.02",
+      "remainingVolume":"57.67499800"
+   },
+   "msg":"Post Trade Successfully!"
+}
+
+</code></pre><h3 id='parameters'>Parameters</h3>
+<p>The parameters should be passed in the body of POST request as fields of a JSON object.</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>instrument</td>
+<td>string</td>
+<td>Trade instrument for which the order should be placed, e.g. <code>&quot;ETH-BTC&quot;</code></td>
+</tr>
+<tr>
+<td>side</td>
+<td>string</td>
+<td>Order side, can have either of the two values: <br><code>&quot;buy&quot;</code> - buying order; <br><code>&quot;sell&quot;</code> - selling order</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>Optional. Order type. Accepted values: <br><code>&quot;limit&quot;</code> - limit order; <br> The value must comply with the list of  order types supported by the instrument (see the value of parameter <b>supportedOrderTypes</b> of the Instrument).<br> If the parameter is not specified, the default value <code>&quot;limit&quot;</code> is used. <br>More about order types in the corresponding section of documentation</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>decimal</td>
+<td>The amount of base currency to be bought or sold. <br>The value must be greater than or equal to the minVolume of the Instrument</td>
+</tr>
+<tr>
+<td>price</td>
+<td>decimal</td>
+<td>Order price. <br>The value must be greater than or equal to the minPrice of the Instrument.</td>
+</tr>
+</tbody></table>
+<h3 id='response'>Response</h3>
+<p>Returns an object <b>Order</b> with the following structure:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>id</td>
+<td>int</td>
+<td>Unique order identifier</td>
+</tr>
+<tr>
+<td>timestamp</td>
+<td>datetime</td>
+<td>Date and time of creation</td>
+</tr>
+<tr>
+<td>side</td>
+<td>string</td>
+<td>Direction of trade, can have either of the two values: <br> <code>&quot;buy&quot;</code> - buying order; <br> <code>&quot;sell&quot;</code> - selling order</td>
+</tr>
+<tr>
+<td>type</td>
+<td>string</td>
+<td>Order type, can have one of the following values: <br> <code>&quot;limit&quot;</code> - limit order;</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td>Order status, can have one of the following values: <br><code>&quot;submitting&quot;</code> - in the process of submission;</td>
+</tr>
+<tr>
+<td>volume</td>
+<td>decimal</td>
+<td>Initial volume of the order</td>
+</tr>
+<tr>
+<td>price</td>
+<td>decimal</td>
+<td>Initial price of the order. In case of market order, this field contains the value null</td>
+</tr>
+<tr>
+<td>remainingVolume</td>
+<td>decimal</td>
+<td>Remaining volume of the order (volume that hasn’t been filled)</td>
+</tr>
+<tr>
+<td>lastUpdate</td>
+<td>datetime</td>
+<td>Last time the order had undergone changes (remaining volume decreased, status changed, etc.). If this information is not available, the field contains the value null.</td>
+</tr>
+</tbody></table>
+
+<p>The data returned is in JSON format.</p>
+<h3 id='comments'>Comments</h3>
+<p>Order submission is not instantaneous, it’s a process that takes some time (usually less than one second). Consequently, if one sends a request to place an order which implies immediate execution, the response may still contain the status <code>&quot;submitting&quot;</code>. In this situation the orderStatus method may be of use to track the status of order execution later.</p>
+<h1 id='authentication'>Authentication</h1><h2 id='authentication-keys-and-access-rights'>Authentication Keys and Access Rights</h2>
+<p>Some parts of the API require authentication. In order to access them, you need to obtain an authentication key. You can generate one on the API keys tab of the account management page.</p>
+
+<p>Each authentication key contains a pair of credentials: public key (<b>API key</b>), that acts both as trader’s identifier and access token, and private key (<b>Secret</b>), that is used to sign API calls. It is important to keep the private key (<b>Secret</b>) confidential: it should not be disclosed to any third party, including the Tyche Exchange customer support. On the contrary, public key (<b>API key</b>) is not confidential and may be shared with Tyche Exchange support, if necessary.</p>
+
+<p>It is possible to generate multiple authentication keys, each having custom access rights associated with it. The following access permissions can be granted to an authentication key:</p>
+
+<p><b>* R1 </b>- get information about orders, trades, balances;<br>
+    <b>* R2 </b>- place, modify and cancel orders;<br>
+    <b>* R3 </b>- get payment information, such as cryptocurrency deposit address, money transfer history or money transfer status, and preview cryptocurrency withdrawals;<br>
+    <b>* R4 </b>- withdraw cryptocurrency (fiat withdrawals are conducted manually at the moment and not available via the API).<br></p>
+
+<p>You can temporary disable an authentication key or delete it completely at any time. It is recommended that you delete old authentication keys that are no longer in use.</p>
+<h2 id='authentication-process'>Authentication Process</h2>
+<p>Tyche Exchange Trade API 1.0 uses a custom HTTP scheme based on HMAC-SHA512 for authentication. A request to an authenticated endpoint should contain the following headers:</p>
+
+<table><thead>
+<tr>
+<th>Header</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>X-TYCHE-API-KEY</td>
+<td>Your public key (<b>API key</b>)</td>
+</tr>
+<tr>
+<td>X-TYCHE-API-NONCE</td>
+<td>Arbitrary integer value that increases with each request (<b>Nonce</b>)</td>
+</tr>
+<tr>
+<td>X-TYCHE-API-SIGN</td>
+<td>HMAC-generated request signature (<b>Signature</b>)</td>
+</tr>
+</tbody></table>
+<h3 id='x-tyche-api-nonce-header'>X-TYCHE-API-NONCE Header</h3>
+<p>Nonce is a value that varies with each request. It serves the purpose of preventing replay attacks (i.e., when one of the previously sent valid requests is intercepted and fraudulently repeated by an attacker).</p>
+<h3 id='x-tyche-api-sign-header'>X-TYCHE-API-SIGN Header</h3>
+<p>Request signature is a string generated by HMAC-SHA512 algorithm, it ensures that the request was sent by you and wasn’t modified by a 3rd party on the way.</p>
+
+<p>In order to sign the request, one should perform HMAC-SHA512 with the following parameters:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Value</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Key</td>
+<td>Base64-decoded Secret</td>
+</tr>
+<tr>
+<td>Message</td>
+<td>The result of concatenation <b>Path + Nonce + Body,</b> <br> where <br> <b>Path</b> is a URL-path of the request with parameters, e.g. /v1/account/balance?currency=LTC,<br><b>Body</b> is a request body string that contains a JSON object with request parameters (in case of POST request) or omitted (in case of GET request) )</td>
+</tr>
+</tbody></table>
+
+<p>The result of HMAC-SHA512 execution is then Base64-encoded and passed in the request as a value of X-TYCHE-API-SIGN header.</p>
+<h2 id='examples'>Examples</h2>
+<p>The following code samples demonstrate the process of sending GET and POST requests to authenticated endpoints:</p>
+
+<blockquote>
+<p>C# (POST)</p>
+</blockquote>
+<pre class="highlight plaintext"><code>string baseUrl = "https://trade.tyche.exchange/api";
+string apiKey = "-- Your API key --";
+string secret = "-- Your secret --";
+
+
+string path = "/v1/trading/placeOrder";
+string body = @"{
+                    ""instrument"": ""ETH-BTC"",
+                    ""side"": ""sell"",
+                    ""volume"": 1,
+                    ""price"": 12345.67
+                }";
+string nonce = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString();
+
+
+byte[] key = Convert.FromBase64String(secret);
+byte[] message = Encoding.UTF8.GetBytes(path + nonce + body);
+HMACSHA512 hmac = new HMACSHA512(key);
+string signature = Convert.ToBase64String(hmac.ComputeHash(message));
+
+
+WebRequest request = WebRequest.Create(baseUrl + path);
+request.Method = "POST";
+request.Headers.Add("X-TYCHE-API-KEY", apiKey);
+request.Headers.Add("X-TYCHE-API-NONCE", nonce);
+request.Headers.Add("X-TYCHE-API-SIGN", signature);
+
+byte[] requestBody = Encoding.UTF8.GetBytes(body);
+request.ContentLength = requestBody.Length;
+using (Stream stream = request.GetRequestStream())
+    stream.Write(requestBody, 0, requestBody.Length);
+
+
+HttpWebResponse response;
+try
+{
+    response = (HttpWebResponse) request.GetResponse();
+}
+catch (WebException exception)
+{
+    response = (HttpWebResponse) exception.Response;
+}
+
+HttpStatusCode responseStatusCode = response.StatusCode;
+
+string responseBody;
+using (Stream stream = response.GetResponseStream())
+    using (StreamReader streamReader = new StreamReader(stream))
+        responseBody = streamReader.ReadToEnd();
+
+</code></pre>
+<blockquote>
+<p>NodeJS (POST)</p>
+</blockquote>
+<pre class="highlight plaintext"><code>const crypto = require("crypto");
+const request = require("request");
+
+var baseUrl = "https://trade.tyche.exchange/api";
+var apiKey = "-- Your API key --";
+var secret = "-- Your secret --";
+
+var path = "/v1/trading/placeOrder";
+var body = JSON.stringify({
+    instrument: "ETH-BTC",
+    side: "sell",
+    volume: 1,
+    price: 12345.67
+});
+var nonce = Date.now();
+
+var key = Buffer(secret, "base64");
+var message = path + nonce + body;
+var hmac = crypto.createHmac("sha512", key);
+var signature = hmac.update(message).digest('base64');
+
+request({
+        url: baseUrl + path,
+        method: "POST",
+        headers: {
+            "X-TYCHE-API-KEY": apiKey,
+            "X-TYCHE-API-NONCE": nonce,
+            "X-TYCHE-API-SIGN": signature
+        },
+        body: body
+    },
+    function (error, response, body) {
+        console.log("error:", error);
+        console.log("statusCode:", response &amp;&amp; response.statusCode);
+        console.log("body:", body);
+    }
+);
+</code></pre>
+<blockquote>
+<p>PHP (POST)</p>
+</blockquote>
+<pre class="highlight plaintext"><code>$baseUrl = 'https://trade.tyche.exchange/api';
+$apiKey = '-- Your API key --';
+$secret = '-- Your secret --';
+
+$path = '/v1/trading/placeOrder';
+$body = '{
+    "instrument": "ETH-BTC",
+    "side": "sell",
+    "volume": 1,
+    "price": 12345.67
+}';
+$nonce = round(microtime(true) * 1000);
+
+$key = base64_decode($secret);
+$message = $path . $nonce . $body;
+$signature = base64_encode(hash_hmac('sha512', $message, $key, true));
+
+$curl = curl_init($baseUrl . $path);
+curl_setopt($curl, CURLOPT_CUSTOMREQUEST, 'POST');
+curl_setopt($curl, CURLOPT_HTTPHEADER, [
+    'Content-Length:' . strlen($body),
+    'X-TYCHE-API-KEY:' . $apiKey,
+    'X-TYCHE-API-NONCE:' . $nonce,
+    'X-TYCHE-API-SIGN:' . $signature
+]);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $body);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+$responseBody = curl_exec($curl);
+$responseStatusCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
+curl_close($curl)
+</code></pre>
+<blockquote>
+<p>Python (POST)</p>
+</blockquote>
+<pre class="highlight plaintext"><code>import datetime
+import base64
+import hmac
+import json
+from hashlib import sha512
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
+
+baseUrl = "https://trade.tyche.exchange/api"
+apiKey = "-- Your API key --"
+secret = "-- Your secret --"
+
+path = "/v1/trading/placeOrder"
+body = json.dumps({
+        "instrument": "ETH-BTC",
+        "side": "sell",
+        "volume": 1,
+        "price": 12345.67
+    }, separators=(',', ':'))
+nonce = round(datetime.datetime.now().timestamp() * 1000)
+
+key = base64.b64decode(secret)
+message = str.encode(path + str(nonce) + body, "utf-8")
+hmac = hmac.new(key, message, sha512)
+signature = base64.b64encode(hmac.digest()).decode()
+
+request = Request(baseUrl + path)
+request.method = "POST"
+request.data = str.encode(body, "utf-8")
+request.add_header("Content-Length", len(body))
+request.add_header("X-TYCHE-API-KEY", apiKey)
+request.add_header("X-TYCHE-API-NONCE", nonce)
+request.add_header("X-TYCHE-API-SIGN", signature)
+
+try:
+    response = urlopen(request)
+except HTTPError as e:
+    response = e
+
+status = response.getcode()
+body = bytes.decode(response.read())
+
+print("Status code: " + str(status))
+print(body)
+</code></pre>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
